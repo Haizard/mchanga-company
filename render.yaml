@@ -1,10 +1,10 @@
 services:
-  # Combined Web Service (Backend + Frontend)
+  # Backend Web Service
   - type: web
-    name: lite-kideko-aggregates
+    name: mchanga-backend
     env: node
     plan: starter
-    buildCommand: cd frontend && npm ci && npm run build && cd ../backend && npm ci
+    buildCommand: cd backend && npm ci
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
@@ -13,16 +13,30 @@ services:
         value: 5000
       - key: MONGODB_URI
         fromDatabase:
-          name: lite-kideko-aggregates-db
+          name: mchanga-db
           property: connectionString
       - key: CORS_ORIGIN
-        value: https://lite-kideko-aggregates.onrender.com
+        value: https://mchanga-frontend.onrender.com
+      - key: FRONTEND_URL
+        value: https://mchanga-frontend.onrender.com
     healthCheckPath: /api/health
     autoDeploy: true
 
+  # Frontend Static Site
+  - type: web
+    name: mchanga-frontend
+    env: static
+    plan: starter
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://mchanga-backend.onrender.com/api
+    autoDeploy: true
+
 databases:
-  - name: lite-kideko-aggregates-db
-    databaseName: lite_kideko_aggregates
-    user: lite_kideko_user
+  - name: mchanga-db
+    databaseName: mchanga
+    user: mchanga_user
     plan: free
 

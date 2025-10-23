@@ -4,8 +4,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { setupTrackingHandlers } from './websocket/trackingHandler.js';
 import { setupEmergencyHandlers } from './websocket/emergencyHandler.js';
@@ -25,11 +23,6 @@ import billingRouter from './routes/billing.js';
 
 dotenv.config();
 
-// Get __dirname for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -42,7 +35,7 @@ const io = new Server(httpServer, {
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN,
+  origin: process.env.CORS_ORIGIN || ['http://localhost:3000', 'https://mchanga-frontend.onrender.com'],
   credentials: true
 }));
 app.use(express.json());
@@ -87,10 +80,7 @@ const connectDB = async (retries = 5) => {
 
 connectDB();
 
-// Health check route
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'Backend is running', timestamp: new Date() });
-});
+
 
 // API Routes
 app.use('/api/companies', companiesRouter);
@@ -116,18 +106,12 @@ setupEmergencyHandlers(io);
 setupSchedulingHandlers(io);
 
 
-// (Static file serving and SPA fallback removed for separated deployment)
-
 const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
-  const publicUrl = process.env.PUBLIC_URL || process.env.FRONTEND_URL || null;
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
   const apiHost = process.env.API_HOST || `http://localhost:${PORT}`;
-  console.log(`\n✅ Server running on port ${PORT}`);
-  if (publicUrl) {
-    console.log(`🌐 Frontend: ${publicUrl}`);
-  } else {
-    console.log(`🌐 Frontend: http://localhost:${PORT}`);
-  }
+  console.log(`\n✅ Backend server running on port ${PORT}`);
+  console.log(`🌐 Frontend: ${frontendUrl}`);
   console.log(`📡 API: ${apiHost}/api`);
   console.log(`\n🔌 WebSocket server ready for real-time tracking`);
   console.log(`\n📚 API Documentation:`);
