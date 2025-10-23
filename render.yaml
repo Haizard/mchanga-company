@@ -1,0 +1,39 @@
+services:
+  # Backend Service
+  - type: web
+    name: lite-kideko-aggregates-backend
+    env: node
+    plan: starter
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        fromDatabase:
+          name: lite-kideko-aggregates-db
+          property: connectionString
+      - key: CORS_ORIGIN
+        value: https://lite-kideko-aggregates-frontend.onrender.com
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+  # Frontend Service
+  - type: static_site
+    name: lite-kideko-aggregates-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://lite-kideko-aggregates-backend.onrender.com
+    autoDeploy: true
+
+databases:
+  - name: lite-kideko-aggregates-db
+    databaseName: lite_kideko_aggregates
+    user: lite_kideko_user
+    plan: free
+
