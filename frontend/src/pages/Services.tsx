@@ -33,7 +33,9 @@ const Services: React.FC = () => {
     cost: 0,
     serviceDate: '',
     status: 'scheduled',
-    description: ''
+    description: '',
+    mileage: 0,
+    provider: ''
   });
   const [filterStatus, setFilterStatus] = useState('all');
   const [message, setMessage] = useState('');

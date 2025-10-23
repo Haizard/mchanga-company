@@ -48,8 +48,8 @@ const Trips: React.FC = () => {
     endTime: '',
     distance: 0,
     fare: 0,
-    status: 'scheduled' as const,
-    paymentStatus: 'pending' as const,
+    status: 'scheduled',
+    paymentStatus: 'pending',
     notes: ''
   });
 
@@ -147,8 +147,8 @@ const Trips: React.FC = () => {
       endTime: trip.endTime ? trip.endTime.split('T')[0] : '',
       distance: trip.distance || 0,
       fare: trip.fare,
-      status: trip.status,
-      paymentStatus: trip.paymentStatus,
+      status: trip.status as 'scheduled' | 'in-progress' | 'completed' | 'cancelled',
+      paymentStatus: trip.paymentStatus as 'pending' | 'paid' | 'partial',
       notes: trip.notes || ''
     });
     setEditingId(trip._id);

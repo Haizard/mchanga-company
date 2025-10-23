@@ -5,7 +5,7 @@ import './Payments.css';
 interface Payment {
   _id: string;
   paymentNumber: string;
-  customer: { firstName: string; lastName: string };
+  customer: { _id: string; firstName: string; lastName: string };
   trip?: { tripNumber: string };
   amount: number;
   paymentMethod: string;
