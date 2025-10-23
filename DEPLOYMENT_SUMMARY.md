@@ -24,7 +24,7 @@ Your project is now ready for **separate deployment** with these changes:
 
 ### 1. Deploy Backend First
 ```
-Service Name: mchanga-backend
+Service Name: mchanga-company
 Type: Web Service
 Build: cd backend && npm ci
 Start: cd backend && npm start
@@ -33,28 +33,28 @@ Environment Variables:
   - PORT=5000
   - RENDER=true
   - MONGODB_URI=[your_mongodb_uri]
-  - CORS_ORIGIN=https://mchanga-frontend.onrender.com
-  - FRONTEND_URL=https://mchanga-frontend.onrender.com
-  - API_HOST=https://mchanga-backend.onrender.com
+  - CORS_ORIGIN=https://lite-kideko-aggregates.onrender.com
+  - FRONTEND_URL=https://lite-kideko-aggregates.onrender.com
+  - API_HOST=https://mchanga-company.onrender.com
 ```
 
 ### 2. Deploy Frontend Second
 ```
-Service Name: mchanga-frontend  
+Service Name: lite-kideko-aggregates
 Type: Static Site
 Build: cd frontend && npm ci && npm run build
 Publish: frontend/dist
 Environment Variables:
-  - VITE_API_URL=https://mchanga-backend.onrender.com/api
+  - VITE_API_URL=https://mchanga-company.onrender.com/api
 ```
 
 ## 🌐 URLs After Deployment
 
 ```
-Frontend: https://mchanga-frontend.onrender.com
-Backend:  https://mchanga-backend.onrender.com  
-API:      https://mchanga-backend.onrender.com/api
-Health:   https://mchanga-backend.onrender.com/api/health
+Frontend: https://lite-kideko-aggregates.onrender.com
+Backend:  https://mchanga-company.onrender.com
+API:      https://mchanga-company.onrender.com/api
+Health:   https://mchanga-company.onrender.com/api/health
 ```
 
 ## 💰 Cost Breakdown
