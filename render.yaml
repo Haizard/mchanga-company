@@ -1,7 +1,7 @@
 services:
   # Backend Web Service
   - type: web
-    name: mchanga-backend
+    name: mchanga-company
     env: node
     plan: starter
     buildCommand: cd backend && npm ci
@@ -18,24 +18,24 @@ services:
           name: mchanga-db
           property: connectionString
       - key: CORS_ORIGIN
-        value: https://mchanga-frontend.onrender.com
+        value: https://lite-kideko-aggregates.onrender.com
       - key: FRONTEND_URL
-        value: https://mchanga-frontend.onrender.com
+        value: https://lite-kideko-aggregates.onrender.com
       - key: API_HOST
-        value: https://mchanga-backend.onrender.com
+        value: https://mchanga-company.onrender.com
     healthCheckPath: /api/health
     autoDeploy: true
 
   # Frontend Static Site
   - type: web
-    name: mchanga-frontend
+    name: lite-kideko-aggregates
     env: static
     plan: starter
     buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
-        value: https://mchanga-backend.onrender.com/api
+        value: https://mchanga-company.onrender.com/api
     autoDeploy: true
 
 databases:

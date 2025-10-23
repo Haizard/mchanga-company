@@ -35,7 +35,7 @@ const io = new Server(httpServer, {
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || ['http://localhost:3000', 'https://mchanga-frontend.onrender.com'],
+  origin: process.env.CORS_ORIGIN || ['http://localhost:3000', 'https://lite-kideko-aggregates.onrender.com'],
   credentials: true
 }));
 app.use(express.json());
@@ -116,8 +116,8 @@ httpServer.listen(PORT, () => {
 
   if (isProduction && isRender) {
     // Production on Render
-    frontendUrl = process.env.FRONTEND_URL || 'https://mchanga-frontend.onrender.com';
-    apiHost = process.env.API_HOST || `https://mchanga-backend.onrender.com`;
+    frontendUrl = process.env.FRONTEND_URL || 'https://lite-kideko-aggregates.onrender.com';
+    apiHost = process.env.API_HOST || `https://mchanga-company.onrender.com`;
   } else if (isProduction) {
     // Production but not on Render
     frontendUrl = process.env.FRONTEND_URL || `https://localhost:${PORT}`;
