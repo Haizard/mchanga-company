@@ -108,12 +108,37 @@ setupSchedulingHandlers(io);
 
 const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-  const apiHost = process.env.API_HOST || `http://localhost:${PORT}`;
+  const isProduction = process.env.NODE_ENV === 'production';
+  const isRender = process.env.RENDER === 'true';
+
+  // Determine URLs based on environment
+  let frontendUrl, apiHost;
+
+  if (isProduction && isRender) {
+    // Production on Render
+    frontendUrl = process.env.FRONTEND_URL || 'https://mchanga-frontend.onrender.com';
+    apiHost = process.env.API_HOST || `https://mchanga-backend.onrender.com`;
+  } else if (isProduction) {
+    // Production but not on Render
+    frontendUrl = process.env.FRONTEND_URL || `https://localhost:${PORT}`;
+    apiHost = process.env.API_HOST || `https://localhost:${PORT}`;
+  } else {
+    // Development
+    frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    apiHost = process.env.API_HOST || `http://localhost:${PORT}`;
+  }
+
   console.log(`\n✅ Backend server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🏗️  Platform: ${isRender ? 'Render' : 'Local'}`);
   console.log(`🌐 Frontend: ${frontendUrl}`);
   console.log(`📡 API: ${apiHost}/api`);
-  console.log(`\n🔌 WebSocket server ready for real-time tracking`);
+  console.log(`🔌 WebSocket: ${apiHost}`);
+
+  if (isProduction) {
+    console.log(`\n🔒 CORS Origin: ${process.env.CORS_ORIGIN || 'Not set'}`);
+  }
+
   console.log(`\n📚 API Documentation:`);
   console.log(`  GET  /api/health - Health check`);
   console.log(`  GET  /api/companies - List all companies`);

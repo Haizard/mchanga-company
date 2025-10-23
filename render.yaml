@@ -11,6 +11,8 @@ services:
         value: production
       - key: PORT
         value: 5000
+      - key: RENDER
+        value: true
       - key: MONGODB_URI
         fromDatabase:
           name: mchanga-db
@@ -19,6 +21,8 @@ services:
         value: https://mchanga-frontend.onrender.com
       - key: FRONTEND_URL
         value: https://mchanga-frontend.onrender.com
+      - key: API_HOST
+        value: https://mchanga-backend.onrender.com
     healthCheckPath: /api/health
     autoDeploy: true
 
