@@ -120,9 +120,15 @@ setupSchedulingHandlers(io);
 
 const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
+  const publicUrl = process.env.PUBLIC_URL || process.env.FRONTEND_URL || null;
+  const apiHost = process.env.API_HOST || `http://localhost:${PORT}`;
   console.log(`\n✅ Server running on port ${PORT}`);
-  console.log(`🌐 Frontend: http://localhost:${PORT}`);
-  console.log(`📡 API: http://localhost:${PORT}/api`);
+  if (publicUrl) {
+    console.log(`🌐 Frontend: ${publicUrl}`);
+  } else {
+    console.log(`🌐 Frontend: http://localhost:${PORT}`);
+  }
+  console.log(`📡 API: ${apiHost}/api`);
   console.log(`\n🔌 WebSocket server ready for real-time tracking`);
   console.log(`\n📚 API Documentation:`);
   console.log(`  GET  /api/health - Health check`);
