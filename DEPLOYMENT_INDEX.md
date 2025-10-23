@@ -103,7 +103,7 @@ Read this to understand the complete system:
 1. Go to https://dashboard.render.com
 2. Click "New +" → "Web Service"
 3. Connect GitHub: mchanga-company
-4. Name: mchanga-backend
+4. Name: lite-kideko-aggregates-backend
 5. Build: cd backend && npm install
 6. Start: cd backend && npm start
 7. Add environment variables
@@ -114,7 +114,7 @@ Read this to understand the complete system:
 ```
 1. Click "New +" → "Static Site"
 2. Connect GitHub: mchanga-company
-3. Name: mchanga-frontend
+3. Name: lite-kideko-aggregates-frontend
 4. Build: cd frontend && npm install && npm run build
 5. Publish: frontend/dist
 6. Add environment variables
@@ -133,8 +133,8 @@ Read this to understand the complete system:
 
 ### Step 4: Test (2 min)
 ```
-1. Visit https://mchanga-backend.onrender.com/api/health
-2. Visit https://mchanga-frontend.onrender.com
+1. Visit https://lite-kideko-aggregates-backend.onrender.com/api/health
+2. Visit https://lite-kideko-aggregates-frontend.onrender.com
 3. Test all features
 ```
 
