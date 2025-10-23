@@ -12,5 +12,11 @@ export default defineConfig({
       }
     }
   }
+  ,
+  preview: {
+    allowedHosts: [
+      "lite-kideko-aggregates.onrender.com"
+    ]
+  }
 })
 
