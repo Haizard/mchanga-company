@@ -1,10 +1,10 @@
 services:
-  # Backend Service
+  # Combined Web Service (Backend + Frontend)
   - type: web
-    name: lite-kideko-aggregates-backend
+    name: lite-kideko-aggregates
     env: node
     plan: starter
-    buildCommand: cd backend && npm install
+    buildCommand: cd frontend && npm ci && npm run build && cd ../backend && npm ci
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
@@ -16,19 +16,8 @@ services:
           name: lite-kideko-aggregates-db
           property: connectionString
       - key: CORS_ORIGIN
-        value: https://lite-kideko-aggregates-frontend.onrender.com
+        value: https://lite-kideko-aggregates.onrender.com
     healthCheckPath: /api/health
-    autoDeploy: true
-
-  # Frontend Service
-  - type: static_site
-    name: lite-kideko-aggregates-frontend
-    env: static
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
-    envVars:
-      - key: VITE_API_URL
-        value: https://lite-kideko-aggregates-backend.onrender.com
     autoDeploy: true
 
 databases:
