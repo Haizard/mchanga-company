@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { setupTrackingHandlers } from './websocket/trackingHandler.js';
 import { setupEmergencyHandlers } from './websocket/emergencyHandler.js';
@@ -22,6 +24,10 @@ import reportsRouter from './routes/reports.js';
 import billingRouter from './routes/billing.js';
 
 dotenv.config();
+
+// Get __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const httpServer = createServer(app);
@@ -104,11 +110,31 @@ setupTrackingHandlers(io);
 setupEmergencyHandlers(io);
 setupSchedulingHandlers(io);
 
+// Serve frontend static files (for combined deployment)
+const frontendDistPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendDistPath));
+
+// Fallback to index.html for React Router (SPA)
+app.get('*', (req, res) => {
+  // Don't redirect API calls
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
+  }
+  // Serve index.html for all other routes (React Router)
+  res.sendFile(path.join(frontendDistPath, 'index.html'), (err) => {
+    if (err) {
+      res.status(404).json({ error: 'Frontend not found' });
+    }
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`WebSocket server ready for real-time tracking`);
-  console.log(`API Documentation:`);
+  console.log(`\n✅ Server running on port ${PORT}`);
+  console.log(`🌐 Frontend: http://localhost:${PORT}`);
+  console.log(`📡 API: http://localhost:${PORT}/api`);
+  console.log(`\n🔌 WebSocket server ready for real-time tracking`);
+  console.log(`\n📚 API Documentation:`);
   console.log(`  GET  /api/health - Health check`);
   console.log(`  GET  /api/companies - List all companies`);
   console.log(`  GET  /api/vehicles - List all vehicles`);
