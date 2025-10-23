@@ -29,6 +29,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -38,8 +39,12 @@ const io = new Server(httpServer, {
   }
 });
 
+
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true
+}));
 app.use(express.json());
 
 // Health check endpoint
@@ -110,23 +115,8 @@ setupTrackingHandlers(io);
 setupEmergencyHandlers(io);
 setupSchedulingHandlers(io);
 
-// Serve frontend static files (for combined deployment)
-const frontendDistPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(frontendDistPath));
 
-// Fallback to index.html for React Router (SPA)
-app.get('*', (req, res) => {
-  // Don't redirect API calls
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({ error: 'API endpoint not found' });
-  }
-  // Serve index.html for all other routes (React Router)
-  res.sendFile(path.join(frontendDistPath, 'index.html'), (err) => {
-    if (err) {
-      res.status(404).json({ error: 'Frontend not found' });
-    }
-  });
-});
+// (Static file serving and SPA fallback removed for separated deployment)
 
 const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
